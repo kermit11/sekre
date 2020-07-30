@@ -1,0 +1,17 @@
+mytest: xxx
+#spring:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 634881928063-eki3jv9tpfacodb0hn7fqvthn1imcd9t.apps.googleusercontent.com
+#            client-secret: vhz719N3Gh-WLta0UbsHq1Sb
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 634881928063-eki3jv9tpfacodb0hn7fqvthn1imcd9t.apps.googleusercontent.com
+            client-secret: vhz719N3Gh-WLta0UbsHq1Sb

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
+<head>
+    <link th:href="@{/style.css}" rel="stylesheet" />
+</head>
+<body>
+
+<table style="width:100%">
+    <tr>
+        <td align="right"><h1>סקר'ה</h1></td>
+        <td align="left">שלום, <span th:text="${curUser}"/> <a href="/login"><span th:text="${curUser}=='אורח'?' [התחבר]':'' " /></a></td>
+    </tr>
+</table>
+
+<br>
+<br>
+<br>
+<div style="width:600px; margin:0 auto;">
+    <p th:text="${poll.getQuestion()}"></p>
+    <p>נכתב ע"י:  <span th:text="${poll.getAuthor().getName()}"/></p>
+    <form action="#" th:action="@{/vote}" th:object="${poll}" method="post">
+        <input type="hidden" th:field="*{id}" th:value="${poll.getId()}">
+        <input type="radio" id="voteFor" value="voteFor" name="voteType" onchange="this.form.submit()" th:checked="${userVoting.isVotedFor()}">
+        <label for="voteFor">בעד: <span th:text="${poll.voteTotals.forVotes}"/></label>
+        <br>
+        <input type="radio" id="voteAgainst" value="voteAgainst" name="voteType" onchange="this.form.submit()" th:checked="${userVoting.isVotedAgainst()}">
+        <label for="voteAgainst">נגד: <span th:text="${poll.voteTotals.againstVotes}"/></label>
+    </form>
+    <br>
+    <form action="#" th:action="@{/like}" th:object="${poll}" method="post">
+        <input type="hidden" th:field="*{id}" th:value="${poll.getId()}">
+        <input type="checkbox" id="like" value="like" name="like" onchange="this.form.submit()" th:checked="${userVoting.isLiked()}">
+        <label for="like">אהבו: <span th:text="${poll.voteTotals.likes}"/></label>
+    </form>
+    <br>
+    <br>
+    <br>
+    <p align="center">
+    <a href="/">more</a> | <a href="/new">new</a>
+    </p>
+</div>
+
+</body>
+
+<head>
+    <title>סקר'ה</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+</html>

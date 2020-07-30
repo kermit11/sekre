@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
+<head>
+    <link th:href="@{/style.css}" rel="stylesheet" />
+</head>
+<body>
+
+<table style="width:100%">
+    <tr>
+        <td align="right"><h1>סקר'ה</h1></td>
+        <td align="left">שלום, <span th:text="${curUser}"/> <a href="/login"><span th:text="${curUser}=='אורח'?' [התחבר]':'' " /></a></td>
+    </tr>
+</table>
+
+<br>
+<br>
+<br>
+<form action="#" th:action="@{/addPoll}" method="post">
+    <p align="center">השאלה: <textarea name="question" ></textarea></p>
+    <p align="center">שמך: <input type="text" name="author" th:value="${curUser}"></p>
+    <p align="center"><button type="submit">הוסף</button></p>
+</form>
+<br>
+<br>
+<br>
+
+</body>
+
+</html>
