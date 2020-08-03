@@ -16,11 +16,23 @@
 <br>
 <br>
 <br>
-<form action="#" th:action="@{/addPoll}" method="post">
-    <p align="center">השאלה: <textarea name="question" ></textarea></p>
-    <p align="center">שמך: <input type="text" name="author" th:value="${curUser}"></p>
-    <p align="center"><button type="submit">הוסף</button></p>
-</form>
+<div style="width:600px; margin:0 auto;">
+    <form action="#" th:action="@{/addPoll}" method="post">
+        <table>
+            <tr>
+                <td>השאלה: </td>
+                <td> <textarea name="question" style="width: 400px; height: 80px"></textarea> </td>
+            </tr>
+            <tr>
+                <td>שמך: </td>
+                <td><input type="text" name="author" th:value="${curUser}"></td>
+            </tr>
+            <tr><td colspan="2" align="center"><br><button type="submit">הוסף</button></td></tr>
+        </table>
+        <p></p>
+        <p></p>
+    </form>
+</div>
 <br>
 <br>
 <br>

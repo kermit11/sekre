@@ -5,3 +5,15 @@ body{
     margin-right: 120px;
     margin-left: 120px;
 }
+
+html {
+  font-family: Arial, sans-serif;
+  line-height: 1.15;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+      table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+      }

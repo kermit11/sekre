@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,19 +55,10 @@ public class PollService
         return pollOpt.orElse(null);
     }
 
-    //TODO: REMOVE
-//    /**
-//     * Fetch the updated copy from DB and update all attributes of the existing object (except for the ID which is immutable)
-//     *
-//     */
-//    public void refreshPoll(Poll poll)
-//    {
-//        Poll updatedPoll = getPollByID(poll.getId());
-//        if (updatedPoll == null) return;
-//
-//        poll.setQuestion(updatedPoll.getQuestion());
-//        poll.setAuthor(updatedPoll.getAuthor());
-//        poll.setVotes(updatedPoll.getVotes());
-//        poll.setPublicationDate(updatedPoll.getPublicationDate());
-//    }
+    public List<Poll> getMostPopularPolls(int pageStart, int pageSize)
+    {
+        return pollDao.getTopPolls(PollDao.POLL_LIST_SORTING_TYPE.MOST_LIKES, pageStart, pageSize);
+    }
+
+
 }

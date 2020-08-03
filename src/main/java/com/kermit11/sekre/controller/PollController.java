@@ -5,6 +5,7 @@ import com.kermit11.sekre.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("api/poll")
@@ -31,5 +32,11 @@ public class PollController {
     public Poll getPollByID(@PathVariable("id") UUID id)
     {
         return pollService.getPollByID(id);
+    }
+
+    @GetMapping(path="popular")
+    public List<Poll> getMostPopularPolls(@RequestParam int pageStart, @RequestParam int pageSize)
+    {
+        return pollService.getMostPopularPolls(pageStart, pageSize);
     }
 }

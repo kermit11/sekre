@@ -2,6 +2,7 @@ package com.kermit11.sekre.dao;
 
 import com.kermit11.sekre.model.Poll;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface PollDao
@@ -20,4 +21,7 @@ public interface PollDao
 
     int updatePoll(Poll poll);
 
+    List<Poll> getTopPolls(POLL_LIST_SORTING_TYPE sortingType, int pageStart, int pageSize);
+
+    public enum POLL_LIST_SORTING_TYPE {MOST_LIKES, PUBLICATION_DATE}
 }
