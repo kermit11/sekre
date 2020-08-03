@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
+<body>
+
+<div th:fragment="header">
+    <table style="width:100%">
+        <tr>
+            <td align="right"><h1>סקר'ה</h1></td>
+            <td align="left">שלום, <span th:text="${curUser}"/> <a href="/login"><span th:text="${curUser}=='אורח'?' [התחבר]':'' " /></a></td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <br>
+</div>
+</body>
+
+</html>

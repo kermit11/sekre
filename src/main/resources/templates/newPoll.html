@@ -6,16 +6,8 @@
 </head>
 <body>
 
-<table style="width:100%">
-    <tr>
-        <td align="right"><h1>סקר'ה</h1></td>
-        <td align="left">שלום, <span th:text="${curUser}"/> <a href="/login"><span th:text="${curUser}=='אורח'?' [התחבר]':'' " /></a></td>
-    </tr>
-</table>
+<div th:insert="../fragments/header.html :: header"/>
 
-<br>
-<br>
-<br>
 <div style="width:600px; margin:0 auto;">
     <form action="#" th:action="@{/addPoll}" method="post">
         <table>
