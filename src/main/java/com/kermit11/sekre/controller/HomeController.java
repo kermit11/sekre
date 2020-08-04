@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -111,6 +113,27 @@ public class HomeController {
         pollService.addPoll(newPoll);
 
         return "redirect:/poll/"+newPoll.getId();
+    }
+
+    @RequestMapping(value="/popular", method=RequestMethod.GET)
+    public String getMostPopular(@RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
+    {
+        if (pageStart == null) pageStart = 0;
+        if (pageSize == null) pageSize = 20;
+        String user = userService.getCurrentUserName();
+
+        List<Poll> topPolls = pollService.getMostPopularPolls(pageStart, pageSize);
+
+        //TODO: temp testing code, remove when done
+        if (topPolls != null)
+        {
+            topPolls.get(1).setPublicationDate(new Date());
+        }
+
+        model.addAttribute("curUser", user);
+        model.addAttribute("polls", topPolls);
+
+        return "listPolls";
     }
 
 }
