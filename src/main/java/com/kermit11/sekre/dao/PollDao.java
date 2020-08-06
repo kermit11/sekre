@@ -23,5 +23,7 @@ public interface PollDao
 
     List<Poll> getTopPolls(POLL_LIST_SORTING_TYPE sortingType, int pageStart, int pageSize);
 
+    int getPollCount();
+
     public enum POLL_LIST_SORTING_TYPE {MOST_LIKES, PUBLICATION_DATE}
 }

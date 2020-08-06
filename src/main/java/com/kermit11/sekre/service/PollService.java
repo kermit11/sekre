@@ -60,5 +60,10 @@ public class PollService
         return pollDao.getTopPolls(PollDao.POLL_LIST_SORTING_TYPE.MOST_LIKES, pageStart, pageSize);
     }
 
+    public int getPollCount()
+    {
+        return pollDao.getPollCount();
+    }
+
 
 }

@@ -68,4 +68,9 @@ public class InMemPollDataAccessService implements PollDao
         return retPoles;
     }
 
+    @Override
+    public int getPollCount()
+    {
+        return allPolls.size();
+    }
 }

@@ -3,38 +3,61 @@
 <html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
 <head>
     <link th:href="@{/style.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/pagination.js}"> </script>
 </head>
 <body>
 
 <div th:insert="../fragments/header.html :: header"/>
 
-<div style="width:90%; margin:0 auto;">
-        <table width="100%">
-            <thead>
-                <tr>
-                    <th>הסקר'ה</th>
-                    <th>המחוקק</th>
-                    <th>כמה בעד, כמה נגד</th>
-                    <th>פורסם בתוכנית?</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:if="${polls.empty}">
-                    <td colspan="4"> כרגע אין מה להציג פה </td>
-                </tr>
-                <tr th:each="poll: ${polls}">
-                    <td> <span th:text="${poll.question}"/> </td>
-                    <td> <span th:text="${poll.author.name}"/>  </td>
-                    <td>
-                        <span th:text="${poll.voteTotals.forVotes}"/> &#128077;
-                        <span th:text="${poll.voteTotals.againstVotes}"/> &#128078;
-                        <span th:text="${poll.voteTotals.likes}"/> &#10084;
-                    </td>
-                    <td> <span th:text="${#dates.format(poll.publicationDate, 'dd/MM/yyyy')}"/>  </td>
-                </tr>
-            </tbody>
+<div align="center" style="width:90%; margin:0 auto;">
+    <table width="100%">
+        <thead>
+        <tr>
+            <th>הסקר'ה</th>
+            <th>המחוקק</th>
+            <th nowrap>כמה בעד, כמה נגד</th>
+            <th>פורסם בתוכנית?</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${polls.empty}">
+            <td colspan="4"> כרגע אין מה להציג פה </td>
+        </tr>
+        <tr th:each="poll: ${polls}">
+            <td> <span th:text="${poll.question}"/> </td>
+            <td> <span th:text="${poll.author.name}"/>  </td>
+            <td>
+                <span th:text="${poll.voteTotals.forVotes}"/> &#128077;
+                <span th:text="${poll.voteTotals.againstVotes}"/> &#128078;
+                <span th:text="${poll.voteTotals.likes}"/> &#10084;
+            </td>
+            <td> <span th:text="${#dates.format(poll.publicationDate, 'dd/MM/yyyy')}"/>  </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+    <br>
+
+    <div th:fragment="pagination" dir="ltr">
+        <table border="1">
+            <tr id="paginationRow"/>
         </table>
+        <br>
+        <br>
+        <br>
+        <script th:inline="javascript">
+            var pageSize = [[${pagInfo.pageSize}]];
+            var pageStart = [[${pagInfo.pageStart}]];
+            var totalSize = [[${pagInfo.totalSize}]];
+            var pagTR = document.getElementById('paginationRow');
+
+            createPaginationElement(pageSize, pageStart, totalSize, pagTR);
+        </script>
+    </div>
 </div>
+
 
 </body>
 

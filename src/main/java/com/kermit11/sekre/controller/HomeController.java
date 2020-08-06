@@ -118,20 +118,29 @@ public class HomeController {
     @RequestMapping(value="/popular", method=RequestMethod.GET)
     public String getMostPopular(@RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
     {
-        if (pageStart == null) pageStart = 0;
-        if (pageSize == null) pageSize = 20;
+        if (pageStart == null) pageStart = 1;
+        if (pageSize == null) pageSize = 10;
+
         String user = userService.getCurrentUserName();
 
-        List<Poll> topPolls = pollService.getMostPopularPolls(pageStart, pageSize);
+        List<Poll> topPolls = pollService.getMostPopularPolls(pageStart-1, pageSize);
+        int totalPolls = pollService.getPollCount();
+
+        if (pageStart > totalPolls)
+        {
+            //TODO: Err properly
+            throw new IllegalArgumentException("pageStart value too high!");
+        }
 
         //TODO: temp testing code, remove when done
         if (topPolls != null)
         {
-            topPolls.get(1).setPublicationDate(new Date());
+            topPolls.get(0).setPublicationDate(new Date());
         }
 
         model.addAttribute("curUser", user);
         model.addAttribute("polls", topPolls);
+        model.addAttribute("pagInfo", new PaginationInfo(pageStart, pageSize, totalPolls));
 
         return "listPolls";
     }
