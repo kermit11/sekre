@@ -2,6 +2,8 @@
 
 <html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
 <head>
+    <title>סקר'ה</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link th:href="@{/style.css}" rel="stylesheet" />
 </head>
 <body>
@@ -25,19 +27,10 @@
         <input type="checkbox" id="like" value="like" name="like" onchange="this.form.submit()" th:checked="${userVoting.isLiked()}">
         <label for="like">אהבו: <span th:text="${poll.voteTotals.likes}"/></label>
     </form>
-    <br>
-    <br>
-    <br>
-    <p align="center">
-    <a href="/">הצג עוד</a> | <a href="/new">הוסף חדש</a> | <a href="/popular">הכי אהובים</a>
-    </p>
 </div>
 
-</body>
+<div th:insert="../fragments/footer.html :: footer"/>
 
-<head>
-    <title>סקר'ה</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
+</body>
 
 </html>

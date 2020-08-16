@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
+<body>
+
+<div th:fragment="footer">
+    <br>
+    <br>
+    <br>
+    <p align="center">
+        <a href="/"><span th:if="${#httpServletRequest.requestURI}=='/'">הצג עוד</span><span th:if="${#httpServletRequest.requestURI}!='/'">ראשי</span></a>
+        <span th:if="${#httpServletRequest.requestURI}!='/new'">| <a href="/new">הוסף חדש</a></span>
+        <span th:if="${#httpServletRequest.requestURI}!='/popular'">| <a href="/popular">הכי אהובים</a></span>
+    </p>
+</div>
+</body>
+
+</html>

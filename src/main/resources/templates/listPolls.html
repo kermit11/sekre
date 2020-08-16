@@ -44,10 +44,7 @@
         <table border="1">
             <tr id="paginationRow"/>
         </table>
-        <br>
-        <br>
-        <br>
-        <script th:inline="javascript">
+            <script th:inline="javascript">
             var pageSize = [[${pagInfo.pageSize}]];
             var pageStart = [[${pagInfo.pageStart}]];
             var totalSize = [[${pagInfo.totalSize}]];
@@ -58,6 +55,7 @@
     </div>
 </div>
 
+<div th:insert="../fragments/footer.html :: footer"/>
 
 </body>
 
