@@ -17,6 +17,7 @@ public class YAMLConfig
         this.mytest = mytest;
     }
 
+    //TODO: get rid of this property
     private String mytest;
 
 
