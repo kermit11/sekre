@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -62,6 +63,15 @@ public class HomeController {
         model.addAttribute("userVoting", userVoting);
 
         return "index";
+    }
+
+    @RequestMapping(value="/login", method=RequestMethod.GET)
+    public String login(HttpServletRequest request)
+    {
+        String referrer = request.getHeader("Referer");
+        request.getSession().setAttribute("url_prior_login", referrer);
+
+        return "login";
     }
 
     @RequestMapping(value = "/vote", method = RequestMethod.POST, params = "voteType=voteFor")

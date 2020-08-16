@@ -1,9 +1,11 @@
 package com.kermit11.sekre.security;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter
@@ -13,10 +15,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     {
         http.authorizeRequests()
                 .anyRequest()
-                .permitAll()
+                    .permitAll()
                 .and().oauth2Login()
+                    .loginPage("/login")
+                    .successHandler(successHandler())
                 .and()
-                .csrf().disable()
+                    .csrf().disable()
                 ;
 //        http.authorizeRequests()
 //                .antMatchers("/", "/index.html")
@@ -25,5 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 //                .authenticated();
     }
 
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new LoginSuccessHandler();
+    }
 
 }
