@@ -20,6 +20,7 @@ public class AuthorController
         this.authorService = authorService;
     }
 
+    //TODO: Check if this is really required. If it will be called then consider calling createAuthor() to avoid duplicates
     @PostMapping
     public void addAuthor(@RequestBody @NonNull Author author)
     {

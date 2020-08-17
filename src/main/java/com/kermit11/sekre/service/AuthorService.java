@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,21 +21,26 @@ public class AuthorService
         this.authorDao = authorDao;
     }
 
-    public int addAuthor(Author author)
+    public Author addAuthor(Author author)
     {
         return authorDao.insertAuthor(author);
     }
 
     public Author createAuthor(String authorName)
     {
-        Author author = new Author(UUID.randomUUID(), authorName);
-        authorDao.insertAuthor(author);
-
-        return author;
+        //Don't create duplicates, work with existing object if possible
+        Optional<Author> author = getAuthorByName(authorName);
+        return author.orElseGet(() -> {
+            Author newAuthor = new Author(UUID.randomUUID(), authorName);
+            addAuthor(newAuthor);
+            return newAuthor;
+        });
     }
 
     public List<Author> searchAuthorByName(String partialName)
     {
         return authorDao.searchAuthorByName(partialName);
     }
+
+    public Optional<Author> getAuthorByName(String name) { return authorDao.getAuthorByName(name);}
 }

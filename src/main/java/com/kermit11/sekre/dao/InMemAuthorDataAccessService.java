@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -14,11 +15,10 @@ public class InMemAuthorDataAccessService implements AuthorDao
     private static final List<Author> allAuthors = new ArrayList<>();
 
     @Override
-    public int insertAuthor(UUID id, Author author)
+    public Author insertAuthor(UUID id, Author author)
     {
-        //TODO check if user already exists first
-        allAuthors.add(new Author(id, author.getName()));
-        return 1;
+        allAuthors.add(author);
+        return author;
     }
 
     @Override
@@ -29,5 +29,11 @@ public class InMemAuthorDataAccessService implements AuthorDao
                 .collect(Collectors.toList());
     }
 
-
+    @Override
+    public Optional<Author> getAuthorByName(String name)
+    {
+        return allAuthors.stream()
+                .filter(author -> author.getName().equals(name))
+                .findAny();
+    }
 }
