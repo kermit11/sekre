@@ -150,6 +150,7 @@ public class HomeController {
         }
 
         model.addAttribute("curUser", user);
+        model.addAttribute("listingTitle", "הכי אהובים");
         model.addAttribute("polls", topPolls);
         model.addAttribute("pagInfo", new PaginationInfo(pageStart, pageSize, totalPolls));
 
@@ -178,6 +179,7 @@ public class HomeController {
         }
 
         model.addAttribute("curUser", user);
+        model.addAttribute("listingTitle", "הסקרים של: " + name);
         model.addAttribute("polls", authorPolls);
         model.addAttribute("pagInfo", pagInfo);
 
