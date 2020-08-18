@@ -1,6 +1,8 @@
 package com.kermit11.sekre.service;
 
+import com.kermit11.sekre.controller.PaginationInfo;
 import com.kermit11.sekre.dao.PollDao;
+import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 import com.kermit11.sekre.model.VoteTotals;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,11 @@ public class PollService
     public List<Poll> getMostPopularPolls(int pageStart, int pageSize)
     {
         return pollDao.getTopPolls(PollDao.POLL_LIST_SORTING_TYPE.MOST_LIKES, pageStart, pageSize);
+    }
+
+    public List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo)
+    {
+        return pollDao.getPollsByAuthor(author, paginationInfo);
     }
 
     public int getPollCount()

@@ -1,5 +1,7 @@
 package com.kermit11.sekre.dao;
 
+import com.kermit11.sekre.controller.PaginationInfo;
+import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public interface PollDao
     int updatePoll(Poll poll);
 
     List<Poll> getTopPolls(POLL_LIST_SORTING_TYPE sortingType, int pageStart, int pageSize);
+
+    List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo);
 
     int getPollCount();
 

@@ -129,10 +129,11 @@ public class HomeController {
     public String getMostPopular(@RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
     {
         if (pageStart == null) pageStart = 1;
-        if (pageSize == null) pageSize = 10;
+        if (pageSize == null) pageSize = 10; //TODO toeknize
 
         String user = userService.getCurrentUserName();
 
+        //TODO: use a pagination object as done in getPollsByAuthor
         List<Poll> topPolls = pollService.getMostPopularPolls(pageStart-1, pageSize);
         int totalPolls = pollService.getPollCount();
 
@@ -151,6 +152,34 @@ public class HomeController {
         model.addAttribute("curUser", user);
         model.addAttribute("polls", topPolls);
         model.addAttribute("pagInfo", new PaginationInfo(pageStart, pageSize, totalPolls));
+
+        return "listPolls";
+    }
+
+    @RequestMapping(value = "/author/{name}", method=RequestMethod.GET)
+    public String getPollsByAuthor(@PathVariable String name, @RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
+    {
+        if (pageStart == null) pageStart = 1;
+        if (pageSize == null) pageSize = 10; //TODO toeknize
+
+        String user = userService.getCurrentUserName();
+
+        Author author = authorService.getAuthorByName(name)
+                .orElseThrow(()->new IllegalArgumentException("Author " + name + " doesn't exist!"));
+
+
+        PaginationInfo pagInfo = new PaginationInfo(pageStart, pageSize, 0);
+        List<Poll> authorPolls = pollService.getPollsByAuthor(author, pagInfo);
+
+        if (pagInfo.getPageStart() > pagInfo.getTotalSize())
+        {
+            //TODO: Err properly
+            throw new IllegalArgumentException("pageStart value too high!");
+        }
+
+        model.addAttribute("curUser", user);
+        model.addAttribute("polls", authorPolls);
+        model.addAttribute("pagInfo", pagInfo);
 
         return "listPolls";
     }

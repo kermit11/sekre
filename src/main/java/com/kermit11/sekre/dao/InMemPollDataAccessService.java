@@ -1,5 +1,7 @@
 package com.kermit11.sekre.dao;
 
+import com.kermit11.sekre.controller.PaginationInfo;
+import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 import org.springframework.stereotype.Repository;
 
@@ -14,14 +16,13 @@ public class InMemPollDataAccessService implements PollDao
     private static final Map<POLL_LIST_SORTING_TYPE, Comparator<Poll>> sorters = Map.of
             (
                     POLL_LIST_SORTING_TYPE.MOST_LIKES,
-                    new Comparator<Poll>() { public int compare(Poll poll1, Poll poll2) {
+                    (poll1, poll2) -> {
                         Integer p1Likes = poll1.getVoteTotals().getLikes();
                         Integer p2Likes = poll2.getVoteTotals().getLikes();
                         //Most likes == most to least, so reverse order
                         return p2Likes.compareTo(p1Likes);
                     }
-            }
-    );
+            );
 
 
     @Override
@@ -60,12 +61,27 @@ public class InMemPollDataAccessService implements PollDao
     @Override
     public List<Poll> getTopPolls(POLL_LIST_SORTING_TYPE sortingType, int pageStart, int pageSize)
     {
-        List<Poll> retPoles = allPolls.values().stream()
+        List<Poll> retPolls = allPolls.values().stream()
                 .sorted(sorters.get(sortingType))
                 .skip(pageStart)
                 .limit(pageSize)
                 .collect(Collectors.toList());
-        return retPoles;
+
+        return retPolls;
+    }
+
+    @Override
+    public List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo)
+    {
+        List<Poll> retPolls = allPolls.values().stream()
+                .filter(poll->poll.getAuthor().getName().equals(author.getName()))
+                .skip(paginationInfo.getPageStart()-1)
+                .limit(paginationInfo.getPageSize())
+                .collect(Collectors.toList());
+
+        paginationInfo.setTotalSize(retPolls.size());
+
+        return retPolls;
     }
 
     @Override
