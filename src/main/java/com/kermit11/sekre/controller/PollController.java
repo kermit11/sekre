@@ -18,7 +18,7 @@ public class PollController {
         this.pollService = pollService;
     }
 
-    @PostMapping
+    @PostMapping  //TODO - check why getPollsByAuthor doesn't work with authors coming from this controller
     public void addPoll(@RequestBody Poll poll) {
         pollService.addPoll(poll);
     }

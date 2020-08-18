@@ -27,7 +27,7 @@
         </tr>
         <tr th:each="poll: ${polls}">
             <td> <span th:text="${poll.question}"/> </td>
-            <td> <span th:text="${poll.author.name}"/>  </td>
+            <td> <a th:href="@{/author/{name}(name=${poll.author.name})}"> <span th:text="${poll.author.name}"/> </a> </td>
             <td>
                 <span th:text="${poll.voteTotals.forVotes}"/> &#128077;
                 <span th:text="${poll.voteTotals.againstVotes}"/> &#128078;
