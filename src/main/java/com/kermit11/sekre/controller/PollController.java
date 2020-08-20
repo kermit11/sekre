@@ -1,6 +1,8 @@
 package com.kermit11.sekre.controller;
 
+import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
+import com.kermit11.sekre.service.AuthorService;
 import com.kermit11.sekre.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +14,18 @@ import java.util.UUID;
 @RestController
 public class PollController {
     private final PollService pollService;
+    private final AuthorService authorService;
 
     @Autowired
-    public PollController(PollService pollService) {
+    public PollController(PollService pollService, AuthorService authorService) {
         this.pollService = pollService;
+        this.authorService = authorService;
     }
 
-    @PostMapping  //TODO - check why getPollsByAuthor doesn't work with authors coming from this controller
+    @PostMapping
     public void addPoll(@RequestBody Poll poll) {
+        Author newAuthor = authorService.createAuthor(poll.getAuthor().getName());
+        poll.setAuthor(newAuthor);
         pollService.addPoll(poll);
     }
 
