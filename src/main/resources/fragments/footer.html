@@ -8,7 +8,7 @@
     <br>
     <br>
     <p align="center">
-        <a href="/"><span th:if="${#httpServletRequest.requestURI}=='/'">הצג עוד</span><span th:if="${#httpServletRequest.requestURI}!='/'">ראשי</span></a>
+        <a href="/"><span th:if="${#httpServletRequest.requestURI}=='/' or ${#strings.contains(#httpServletRequest.requestURI, '/poll')} ">הצג עוד</span><span th:if="${#httpServletRequest.requestURI}!='/' and !${#strings.contains(#httpServletRequest.requestURI, '/poll')} ">ראשי</span></a>
         <span th:if="${#httpServletRequest.requestURI}!='/new'">| <a href="/new">הוסף חדש</a></span>
         <span th:if="${#httpServletRequest.requestURI}!='/popular'">| <a href="/popular">הכי אהובים</a></span>
     </p>
