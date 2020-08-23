@@ -23,13 +23,11 @@ public interface PollDao
 
     int updatePoll(Poll poll);
 
-    List<Poll> getTopPolls(POLL_LIST_SORTING_TYPE sortingType, int pageStart, int pageSize);
-
-    List<Poll> getPollsByCriteria(POLL_LIST_FILTER filter, Object filterValue, PaginationInfo paginationInfo);
+    List<Poll> getPolls(POLL_LIST_SORTING_TYPE sortingType, POLL_LIST_FILTER filter, Object filterValue, PaginationInfo paginationInfo);
 
     int getPollCount();
 
-    public enum POLL_LIST_SORTING_TYPE {MOST_LIKES, PUBLICATION_DATE}
+    public enum POLL_LIST_SORTING_TYPE {DEFAULT, MOST_LIKES, PUBLICATION_DATE}
 
-    public enum POLL_LIST_FILTER {AUTHOR, BROADCAST}
+    public enum POLL_LIST_FILTER {NO_FILTER, AUTHOR, BROADCAST}
 }

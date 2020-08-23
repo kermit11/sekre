@@ -57,19 +57,19 @@ public class PollService
         return pollOpt.orElse(null);
     }
 
-    public List<Poll> getMostPopularPolls(int pageStart, int pageSize)
+    public List<Poll> getMostPopularPolls(PaginationInfo paginationInfo)
     {
-        return pollDao.getTopPolls(PollDao.POLL_LIST_SORTING_TYPE.MOST_LIKES, pageStart, pageSize);
+        return pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.MOST_LIKES, PollDao.POLL_LIST_FILTER.NO_FILTER, null, paginationInfo);
     }
 
     public List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo)
     {
-        return pollDao.getPollsByCriteria(PollDao.POLL_LIST_FILTER.AUTHOR, author, paginationInfo);
+        return pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.DEFAULT, PollDao.POLL_LIST_FILTER.AUTHOR, author, paginationInfo);
     }
 
     public List<Poll> getOnAirPolls(PaginationInfo paginationInfo)
     {
-        return pollDao.getPollsByCriteria(PollDao.POLL_LIST_FILTER.BROADCAST, Boolean.TRUE, paginationInfo);
+        return pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.PUBLICATION_DATE, PollDao.POLL_LIST_FILTER.BROADCAST, Boolean.TRUE, paginationInfo);
     }
 
     public int getPollCount()

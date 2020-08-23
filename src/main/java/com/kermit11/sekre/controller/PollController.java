@@ -43,6 +43,8 @@ public class PollController {
     @GetMapping(path="popular")
     public List<Poll> getMostPopularPolls(@RequestParam int pageStart, @RequestParam int pageSize)
     {
-        return pollService.getMostPopularPolls(pageStart, pageSize);
+        //TODO make this work like web controller
+        return null;
+        //return pollService.getMostPopularPolls(pageStart, pageSize);
     }
 }

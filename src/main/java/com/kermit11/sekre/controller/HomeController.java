@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -133,26 +134,29 @@ public class HomeController {
 
         String user = userService.getCurrentUserName();
 
-        //TODO: use a pagination object as done in getPollsByAuthor
-        List<Poll> topPolls = pollService.getMostPopularPolls(pageStart-1, pageSize);
-        int totalPolls = pollService.getPollCount();
+        PaginationInfo pagInfo = new PaginationInfo(pageStart, pageSize, 0);
+        List<Poll> topPolls = pollService.getMostPopularPolls(pagInfo);
 
-        if (pageStart > totalPolls)
+        if (pagInfo.getPageStart() > pagInfo.getTotalSize())
         {
             //TODO: Err properly
             throw new IllegalArgumentException("pageStart value too high!");
         }
 
         //TODO: temp testing code, remove when done
-        if (topPolls != null)
+        if (topPolls != null && topPolls.size() >= 2)
         {
             topPolls.get(0).setPublicationDate(new Date());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DATE,3);
+            topPolls.get(1).setPublicationDate(cal.getTime());
         }
 
         model.addAttribute("curUser", user);
         model.addAttribute("listingTitle", "הכי אהובים");
         model.addAttribute("polls", topPolls);
-        model.addAttribute("pagInfo", new PaginationInfo(pageStart, pageSize, totalPolls));
+        model.addAttribute("pagInfo", pagInfo);
 
         return "listPolls";
     }
