@@ -25,9 +25,11 @@ public interface PollDao
 
     List<Poll> getTopPolls(POLL_LIST_SORTING_TYPE sortingType, int pageStart, int pageSize);
 
-    List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo);
+    List<Poll> getPollsByCriteria(POLL_LIST_FILTER filter, Object filterValue, PaginationInfo paginationInfo);
 
     int getPollCount();
 
     public enum POLL_LIST_SORTING_TYPE {MOST_LIKES, PUBLICATION_DATE}
+
+    public enum POLL_LIST_FILTER {AUTHOR, BROADCAST}
 }

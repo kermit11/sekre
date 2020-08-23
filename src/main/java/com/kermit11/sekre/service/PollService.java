@@ -64,7 +64,7 @@ public class PollService
 
     public List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo)
     {
-        return pollDao.getPollsByAuthor(author, paginationInfo);
+        return pollDao.getPollsByCriteria(PollDao.POLL_LIST_FILTER.AUTHOR, author, paginationInfo);
     }
 
     public int getPollCount()

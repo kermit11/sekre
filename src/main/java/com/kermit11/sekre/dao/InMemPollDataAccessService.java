@@ -6,6 +6,7 @@ import com.kermit11.sekre.model.Poll;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository("inMemPollRepo")
@@ -24,6 +25,14 @@ public class InMemPollDataAccessService implements PollDao
                     }
             );
 
+    private Map<POLL_LIST_FILTER, Predicate<Poll>> filtersMap(Object filterValue)
+    {
+        return Map.of
+                (
+                        POLL_LIST_FILTER.AUTHOR,
+                        poll -> poll.getAuthor().getName().equals(((Author)filterValue).getName())
+                );
+    }
 
     @Override
     public int insertPoll(UUID id, Poll poll)
@@ -71,10 +80,10 @@ public class InMemPollDataAccessService implements PollDao
     }
 
     @Override
-    public List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo)
+    public List<Poll> getPollsByCriteria(POLL_LIST_FILTER filter, Object filterValue, PaginationInfo paginationInfo)
     {
         List<Poll> retPolls = allPolls.values().stream()
-                .filter(poll->poll.getAuthor().getName().equals(author.getName()))
+                .filter(filtersMap(filterValue).get(filter))
                 .skip(paginationInfo.getPageStart()-1)
                 .limit(paginationInfo.getPageSize())
                 .collect(Collectors.toList());
