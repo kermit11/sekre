@@ -67,6 +67,11 @@ public class PollService
         return pollDao.getPollsByCriteria(PollDao.POLL_LIST_FILTER.AUTHOR, author, paginationInfo);
     }
 
+    public List<Poll> getOnAirPolls(PaginationInfo paginationInfo)
+    {
+        return pollDao.getPollsByCriteria(PollDao.POLL_LIST_FILTER.BROADCAST, Boolean.TRUE, paginationInfo);
+    }
+
     public int getPollCount()
     {
         return pollDao.getPollCount();

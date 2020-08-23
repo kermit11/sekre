@@ -186,4 +186,29 @@ public class HomeController {
         return "listPolls";
     }
 
+    @RequestMapping(value = "/onair", method = RequestMethod.GET)
+    public String getBroadcastPolls(@RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
+    {
+        if (pageStart == null) pageStart = 1;
+        if (pageSize == null) pageSize = 10; //TODO toeknize
+
+        String user = userService.getCurrentUserName();
+
+        PaginationInfo pagInfo = new PaginationInfo(pageStart, pageSize, 0);
+        List<Poll> onAirPolls = pollService.getOnAirPolls(pagInfo);
+
+        if (pagInfo.getPageStart() > pagInfo.getTotalSize())
+        {
+            //TODO: Err properly
+            throw new IllegalArgumentException("pageStart value too high!");
+        }
+
+        model.addAttribute("curUser", user);
+        model.addAttribute("listingTitle", "הסקרים שעלו לשידור");
+        model.addAttribute("polls", onAirPolls);
+        model.addAttribute("pagInfo", pagInfo);
+
+        return "listPolls";
+    }
+
 }

@@ -30,7 +30,9 @@ public class InMemPollDataAccessService implements PollDao
         return Map.of
                 (
                         POLL_LIST_FILTER.AUTHOR,
-                        poll -> poll.getAuthor().getName().equals(((Author)filterValue).getName())
+                        poll -> poll.getAuthor().getName().equals(((Author)filterValue).getName()),
+                        POLL_LIST_FILTER.BROADCAST,
+                        poll -> (poll.getPublicationDate() != null) == (Boolean)filterValue
                 );
     }
 
