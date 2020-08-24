@@ -66,9 +66,8 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping(value="/login", method=RequestMethod.GET)
-    public String login(HttpServletRequest request)
-    {
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
 
@@ -94,8 +93,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/like", method = RequestMethod.POST)
-    public String toggleLike(@NonNull @ModelAttribute Poll poll)
-    {
+    public String toggleLike(@NonNull @ModelAttribute Poll poll) {
         String user = userService.getCurrentUserEmail();
 
         votingService.like(poll.getId(), user);
@@ -105,87 +103,54 @@ public class HomeController {
 
 
     @GetMapping("/new")
-    public String newPoll(Model model)
-    {
+    public String newPoll(Model model) {
         String user = userService.getCurrentUserName();
 
-        model.addAttribute("question", new String());
-        model.addAttribute("author", new String());
+        model.addAttribute("question", "");
+        model.addAttribute("author", "");
         model.addAttribute("curUser", user);
 
         return "newPoll";
     }
 
-    @RequestMapping(value="/addPoll", method=RequestMethod.POST)
-    public String addNewPoll(@RequestParam String question, @RequestParam String author)
-    {
+    @RequestMapping(value = "/addPoll", method = RequestMethod.POST)
+    public String addNewPoll(@RequestParam String question, @RequestParam String author) {
         Author newAuthor = authorService.createAuthor(author);
         Poll newPoll = new Poll(question, newAuthor, null, null);
         pollService.addPoll(newPoll);
 
-        return "redirect:/poll/"+newPoll.getId();
+        return "redirect:/poll/" + newPoll.getId();
     }
 
-    @RequestMapping(value="/popular", method=RequestMethod.GET)
+    @RequestMapping(value = "/popular", method = RequestMethod.GET)
     public String getMostPopular(@RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
     {
-        if (pageStart == null) pageStart = 1;
-        if (pageSize == null) pageSize = 10; //TODO toeknize
-
-        String user = userService.getCurrentUserName();
-
-        PaginationInfo pagInfo = new PaginationInfo(pageStart, pageSize, 0);
-        List<Poll> topPolls = pollService.getMostPopularPolls(pagInfo);
-
-        if (pagInfo.getPageStart() > pagInfo.getTotalSize())
-        {
-            //TODO: Err properly
-            throw new IllegalArgumentException("pageStart value too high!");
-        }
+        populatePollList(pageStart, pageSize, pollService::getMostPopularPolls, model);
 
         //TODO: temp testing code, remove when done
-        if (topPolls != null && topPolls.size() >= 2)
-        {
+        @SuppressWarnings("unchecked")
+        List<Poll> topPolls = (List<Poll>) model.getAttribute("polls");
+        if (topPolls != null && topPolls.size() >= 2) {
             topPolls.get(0).setPublicationDate(new Date());
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
-            cal.add(Calendar.DATE,3);
+            cal.add(Calendar.DATE, 3);
             topPolls.get(1).setPublicationDate(cal.getTime());
         }
 
-        model.addAttribute("curUser", user);
         model.addAttribute("listingTitle", "הכי אהובים");
-        model.addAttribute("polls", topPolls);
-        model.addAttribute("pagInfo", pagInfo);
 
         return "listPolls";
     }
 
-    @RequestMapping(value = "/author/{name}", method=RequestMethod.GET)
+    @RequestMapping(value = "/author/{name}", method = RequestMethod.GET)
     public String getPollsByAuthor(@PathVariable String name, @RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
     {
-        if (pageStart == null) pageStart = 1;
-        if (pageSize == null) pageSize = 10; //TODO toeknize
-
-        String user = userService.getCurrentUserName();
-
         Author author = authorService.getAuthorByName(name)
-                .orElseThrow(()->new IllegalArgumentException("Author " + name + " doesn't exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Author " + name + " doesn't exist!"));
 
-
-        PaginationInfo pagInfo = new PaginationInfo(pageStart, pageSize, 0);
-        List<Poll> authorPolls = pollService.getPollsByAuthor(author, pagInfo);
-
-        if (pagInfo.getPageStart() > pagInfo.getTotalSize())
-        {
-            //TODO: Err properly
-            throw new IllegalArgumentException("pageStart value too high!");
-        }
-
-        model.addAttribute("curUser", user);
+        populatePollList(pageStart, pageSize, pag -> pollService.getPollsByAuthor(author, pag), model);
         model.addAttribute("listingTitle", "הסקרים של: " + name);
-        model.addAttribute("polls", authorPolls);
-        model.addAttribute("pagInfo", pagInfo);
 
         return "listPolls";
     }
@@ -193,26 +158,40 @@ public class HomeController {
     @RequestMapping(value = "/onair", method = RequestMethod.GET)
     public String getBroadcastPolls(@RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
     {
+        populatePollList(pageStart, pageSize, pollService::getOnAirPolls, model);
+        model.addAttribute("listingTitle", "הסקרים שעלו לשידור");
+
+        return "listPolls";
+    }
+
+    private void populatePollList(Integer pageStart, Integer pageSize, PollRetriever iPollRetriever, Model model)
+    {
         if (pageStart == null) pageStart = 1;
         if (pageSize == null) pageSize = 10; //TODO toeknize
 
         String user = userService.getCurrentUserName();
 
         PaginationInfo pagInfo = new PaginationInfo(pageStart, pageSize, 0);
-        List<Poll> onAirPolls = pollService.getOnAirPolls(pagInfo);
 
-        if (pagInfo.getPageStart() > pagInfo.getTotalSize())
-        {
+        //The invoker tells us which method to use for retrieving the polls using the input functional interface
+        List<Poll> pollList = iPollRetriever.retrieve(pagInfo);
+
+        if (pagInfo.getPageStart() > pagInfo.getTotalSize()) {
             //TODO: Err properly
             throw new IllegalArgumentException("pageStart value too high!");
         }
 
         model.addAttribute("curUser", user);
-        model.addAttribute("listingTitle", "הסקרים שעלו לשידור");
-        model.addAttribute("polls", onAirPolls);
+        model.addAttribute("polls", pollList);
         model.addAttribute("pagInfo", pagInfo);
 
-        return "listPolls";
+
+    }
+
+    @FunctionalInterface
+    interface PollRetriever
+    {
+        List<Poll> retrieve(PaginationInfo paginationInfo);
     }
 
 }
