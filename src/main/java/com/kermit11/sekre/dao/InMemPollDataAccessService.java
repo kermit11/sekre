@@ -6,6 +6,7 @@ import com.kermit11.sekre.model.Poll;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -90,7 +91,12 @@ public class InMemPollDataAccessService implements PollDao {
                 .limit(paginationInfo.getPageSize())
                 .collect(Collectors.toList());
 
-        paginationInfo.setTotalSize(retPolls.size());
+        //The count here isn't atomic, there is a possibility that between the two statements the filtered size of the list has changed but we can live with it
+        int filteredCount = (int) allPolls.values().stream()
+                .filter(filtersMap(filterValue).get(filter))
+                .count();
+
+        paginationInfo.setTotalSize(filteredCount);
 
         return retPolls;
     }
