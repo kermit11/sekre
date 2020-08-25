@@ -53,6 +53,7 @@
             var pageStart = [[${pagInfo.pageStart}]];
             var totalSize = [[${pagInfo.totalSize}]];
             var pagTR = document.getElementById('paginationRow');
+var referTo = [[${#httpServletRequest.requestURI}]];
 
             createPaginationElement(pageSize, pageStart, totalSize, pagTR);
         </script>

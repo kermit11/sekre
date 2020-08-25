@@ -1,5 +1,3 @@
-//TODO: Parameterize this
-var referTo = '/popular';
 
 function addLinkTo(pageStart, pageSize, elem)
 {
