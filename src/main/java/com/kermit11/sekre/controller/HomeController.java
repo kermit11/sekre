@@ -37,7 +37,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         Poll poll = pollService.getRandomPoll();
-        if (poll == null) return "empty";
+        if (poll == null) return "redirect:/new";
 
         String userDisplayName = userService.getCurrentUserName();
         String userID = userService.getCurrentUserEmail();
@@ -53,7 +53,7 @@ public class HomeController {
     @RequestMapping(value = "/poll/{id}", method = RequestMethod.GET)
     public String getPollById(@PathVariable UUID id, Model model) {
         Poll poll = pollService.getPollByID(id);
-        if (poll == null) return "empty";
+        if (poll == null) return "redirect:/new";
 
         String userDisplayName = userService.getCurrentUserName();
         String userID = userService.getCurrentUserEmail();
