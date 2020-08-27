@@ -31,4 +31,4 @@ build/
 .vscode/
 
 ### Secret properties file ###
-config/
+/config/

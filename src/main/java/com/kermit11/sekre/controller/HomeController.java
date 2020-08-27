@@ -1,5 +1,6 @@
 package com.kermit11.sekre.controller;
 
+import com.kermit11.sekre.config.UIConfigProps;
 import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 import com.kermit11.sekre.model.UserVotes;
@@ -27,17 +28,20 @@ public class HomeController {
     private final UserService userService;
     private final VotingService votingService;
 
+    private final UIConfigProps uiConfigProps;
+
     //TODO: remove, testing
     @Value( "${mytest:zzz}" )
     private String mytest;
 
 
     @Autowired
-    public HomeController(PollService pollService, AuthorService authorService, UserService userService, VotingService votingService) {
+    public HomeController(PollService pollService, AuthorService authorService, UserService userService, VotingService votingService, UIConfigProps uiConfigProps) {
         this.pollService = pollService;
         this.authorService = authorService;
         this.userService = userService;
         this.votingService = votingService;
+        this.uiConfigProps = uiConfigProps;
     }
 
     @GetMapping("/")
@@ -174,7 +178,7 @@ public class HomeController {
     private void populatePollList(Integer pageStart, Integer pageSize, PollRetriever iPollRetriever, Model model)
     {
         if (pageStart == null) pageStart = 1;
-        if (pageSize == null) pageSize = 10; //TODO toeknize
+        if (pageSize == null) pageSize = uiConfigProps.getDefaultPageSize();
 
         String user = userService.getCurrentUserName();
 

@@ -15,3 +15,6 @@ spring:
           google:
             client-id: 634881928063-eki3jv9tpfacodb0hn7fqvthn1imcd9t.apps.googleusercontent.com
             client-secret: vhz719N3Gh-WLta0UbsHq1Sb
+props:
+  ui:
+    default-page-size: 10
