@@ -8,6 +8,7 @@ import com.kermit11.sekre.service.PollService;
 import com.kermit11.sekre.service.UserService;
 import com.kermit11.sekre.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,11 @@ public class HomeController {
     private final UserService userService;
     private final VotingService votingService;
 
+    //TODO: remove, testing
+    @Value( "${mytest:zzz}" )
+    private String mytest;
+
+
     @Autowired
     public HomeController(PollService pollService, AuthorService authorService, UserService userService, VotingService votingService) {
         this.pollService = pollService;
@@ -36,6 +42,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
+        System.out.println(mytest);
         Poll poll = pollService.getRandomPoll();
         if (poll == null) return "redirect:/new";
 
