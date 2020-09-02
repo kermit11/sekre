@@ -1,3 +1,4 @@
+
 body{
     background-color: lightblue;
     margin-top: 60px;
@@ -13,7 +14,17 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-      table {
-        border-collapse: separate;
-        border-spacing: 5px 15px;
-      }
+table {
+    border-collapse: separate;
+    border-spacing: 5px 15px;
+}
+
+.hiddeninput {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+}
+
+.buttonlabel {
+  cursor: pointer;
+}

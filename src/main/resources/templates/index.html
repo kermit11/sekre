@@ -11,23 +11,54 @@
 <div th:insert="../fragments/header.html :: header"/>
 
 <div style="width:600px; margin:0 auto;">
-    <p th:text="${poll.getQuestion()}"></p>
+    <p style="font-size:24px;" th:text="${poll.getQuestion()}"></p>
     <p>נכתב ע"י:  <span th:text="${poll.getAuthor().getName()}"/></p>
-    <form action="#" th:action="@{/vote}" th:object="${poll}" method="post">
+    <form action="#" th:action="@{/vote}" th:object="${poll}" method="post" style="display: inline-block">
         <input type="hidden" th:field="*{id}" th:value="${poll.getId()}">
-        <input type="radio" id="voteFor" value="voteFor" name="voteType" onchange="this.form.submit()" th:checked="${userVoting.isVotedFor()}">
-        <label for="voteFor">בעד: <span th:text="${poll.voteTotals.forVotes}"/></label>
-        <br>
-        <input type="radio" id="voteAgainst" value="voteAgainst" name="voteType" onchange="this.form.submit()" th:checked="${userVoting.isVotedAgainst()}">
-        <label for="voteAgainst">נגד: <span th:text="${poll.voteTotals.againstVotes}"/></label>
+        <input type="radio" class="hiddeninput" id="voteFor" value="voteFor" name="voteType" onchange="this.form.submit()" th:checked="${userVoting.isVotedFor()}">
+        <label class="buttonlabel" for="voteFor"> <img th:src="${userVoting.isVotedFor()?'/buttons/thup-filled.png':'/buttons/thup.png'}" width="18" height="18"> <span th:text="${poll.voteTotals.forVotes}"/></label>
+        <input type="radio" class="hiddeninput" id="voteAgainst" value="voteAgainst" name="voteType" onchange="this.form.submit()" th:checked="${userVoting.isVotedAgainst()}">
+        <label class="buttonlabel" for="voteAgainst"> <img th:src="${userVoting.isVotedAgainst()?'/buttons/thdown-filled.png':'/buttons/thdown.png'}" width="18" height="18"> <span th:text="${poll.voteTotals.againstVotes}"/></label>
     </form>
-    <br>
-    <form action="#" th:action="@{/like}" th:object="${poll}" method="post">
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <form action="#" th:action="@{/like}" th:object="${poll}" method="post" style="display: inline-block">
         <input type="hidden" th:field="*{id}" th:value="${poll.getId()}">
-        <input type="checkbox" id="like" value="like" name="like" onchange="this.form.submit()" th:checked="${userVoting.isLiked()}">
-        <label for="like">אהבו: <span th:text="${poll.voteTotals.likes}"/></label>
+        <input type="image" th:src="${userVoting.isLiked()?'/buttons/heart-red-filled.png':'/buttons/heart-red.png'}" width="18" height="18">
+        <span th:text="${poll.voteTotals.likes}"/>
     </form>
 </div>
+
+<br><br>
+
+<!-- AddToAny BEGIN -->
+<div class="a2a_kit a2a_kit_size_32 a2a_default_style" style="display: flex; justify-content: center;">
+    שתפו והזמינו חברים להצביע:
+    &nbsp;&nbsp;
+    <a class="a2a_button_facebook"></a>
+    <a class="a2a_button_twitter"></a>
+    <a class="a2a_button_whatsapp"></a>
+    <a class="a2a_button_telegram"></a>
+    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+</div>
+<script th:inline="javascript">
+    var pollQuestion = [[${poll.getQuestion()}]];
+</script>
+<script type="text/javascript">
+
+	a2a_config = {
+		templates: {
+		    twitter: "\""+pollQuestion+"\" - בואו להצביע ולהשפיע באתר סקר'ה! ${link}",
+		    whatsapp: "תראו את הסקר'ה הזה: ${link}",
+		    facebook: {
+		        quote: "\""+pollQuestion+"\" - בואו להצביע ולהשפיע באתר סקר'ה!",
+		        href: "${link}"
+            },
+		    telegram: "תראו את הסקר'ה הזה: ${link}"
+		}
+	};
+</script>
+<script async src="https://static.addtoany.com/menu/page.js"></script>
+<!-- AddToAny END -->
 
 <div th:insert="../fragments/footer.html :: footer"/>
 
