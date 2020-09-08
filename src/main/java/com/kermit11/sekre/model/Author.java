@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class Author
 {
-    private final UUID index;
+    private UUID index;
     @NonNull
     private final String name;
 
@@ -24,4 +24,7 @@ public class Author
     }
 
     public UUID getIndex() { return index; }
+    public void setIndex(UUID index) {
+        this.index = index;
+    }
 }

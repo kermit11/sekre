@@ -17,6 +17,7 @@ public class InMemAuthorDataAccessService implements AuthorDao
     @Override
     public Author insertAuthor(UUID id, Author author)
     {
+        author.setIndex(id);
         allAuthors.add(author);
         return author;
     }
