@@ -20,7 +20,7 @@ public class PollService
     private final VotingService votingService;
 
     @Autowired
-    public PollService(@Qualifier("inMemPollRepo") PollDao pollDao, VotingService votingService) {
+    public PollService(@Qualifier("sqlPollRepo") PollDao pollDao, VotingService votingService) {
         this.pollDao = pollDao;
         this.votingService = votingService;
     }

@@ -14,7 +14,7 @@ public class VotingService {
     private final UserVotesDao userVotesDao;
 
     @Autowired
-    public VotingService(@Qualifier("inMemUserVotesRepo") UserVotesDao userVotesDao) {
+    public VotingService(@Qualifier("sqlUserVotesRepo") UserVotesDao userVotesDao) {
         this.userVotesDao = userVotesDao;
     }
 

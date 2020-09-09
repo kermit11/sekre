@@ -16,7 +16,7 @@ public class AuthorService
     private final AuthorDao authorDao;
 
     @Autowired
-    public AuthorService(@Qualifier("inMemAuthorRepo") AuthorDao authorDao)
+    public AuthorService(@Qualifier("sqlAuthorRepo") AuthorDao authorDao)
     {
         this.authorDao = authorDao;
     }
