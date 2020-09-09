@@ -35,7 +35,7 @@ public class InMemUserVotesDataAccessService implements UserVotesDao
         HashMap<String, UserVotes> pollVotes = allVotes.get(pollID);
         if (pollVotes == null) return new UserVotes(userID, pollID, false, false, false);
 
-        return Optional.ofNullable(pollVotes.get(userID)).orElse(new UserVotes(userID, pollID, false, false, false));
+        return Optional.ofNullable(pollVotes.get(userID)).orElseGet(()->new UserVotes(userID, pollID, false, false, false));
     }
 
     @Override
