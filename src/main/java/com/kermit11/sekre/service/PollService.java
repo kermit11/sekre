@@ -29,18 +29,15 @@ public class PollService
         return pollDao.insertPoll(poll);
     }
 
-    public int updatePoll(Poll poll) {
+    public int updatePoll(Poll poll)
+    {
        return pollDao.updatePoll(poll);
     }
 
     public Poll getPollByID(UUID id)
     {
         Optional<Poll> pollOpt = Optional.ofNullable(pollDao.getPollById(id));
-        pollOpt.ifPresent(poll ->
-        {
-            VoteTotals votes = votingService.getTotalVotes(poll.getId());
-            poll.setVoteTotals(votes);
-        });
+        pollOpt.ifPresent(this::updateUserVotes);
 
         return pollOpt.orElse(null);
     }
@@ -48,28 +45,33 @@ public class PollService
     public Poll getRandomPoll()
     {
         Optional<Poll> pollOpt = Optional.ofNullable(pollDao.getRandomPoll());
-        pollOpt.ifPresent(poll ->
-                {
-                    VoteTotals votes = votingService.getTotalVotes(poll.getId());
-                    poll.setVoteTotals(votes);
-                });
+        pollOpt.ifPresent(this::updateUserVotes);
 
         return pollOpt.orElse(null);
     }
 
     public List<Poll> getMostPopularPolls(PaginationInfo paginationInfo)
     {
-        return pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.MOST_LIKES, PollDao.POLL_LIST_FILTER.NO_FILTER, null, paginationInfo);
+        List<Poll> polls = pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.MOST_LIKES, PollDao.POLL_LIST_FILTER.NO_FILTER, null, paginationInfo);
+        polls.stream().forEach(this::updateUserVotes);
+
+        return polls;
     }
 
     public List<Poll> getPollsByAuthor(Author author, PaginationInfo paginationInfo)
     {
-        return pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.DEFAULT, PollDao.POLL_LIST_FILTER.AUTHOR, author, paginationInfo);
+        List<Poll> polls = pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.DEFAULT, PollDao.POLL_LIST_FILTER.AUTHOR, author, paginationInfo);
+        polls.stream().forEach(this::updateUserVotes);
+
+        return polls;
     }
 
     public List<Poll> getOnAirPolls(PaginationInfo paginationInfo)
     {
-        return pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.PUBLICATION_DATE, PollDao.POLL_LIST_FILTER.BROADCAST, Boolean.TRUE, paginationInfo);
+        List<Poll> polls = pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.PUBLICATION_DATE, PollDao.POLL_LIST_FILTER.BROADCAST, Boolean.TRUE, paginationInfo);
+        polls.stream().forEach(this::updateUserVotes);
+
+        return polls;
     }
 
     public int getPollCount()
@@ -78,4 +80,9 @@ public class PollService
     }
 
 
+    private void updateUserVotes(Poll poll)
+    {
+        VoteTotals votes = votingService.getTotalVotes(poll.getId());
+        poll.setVoteTotals(votes);
+    }
 }
