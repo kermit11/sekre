@@ -9,7 +9,7 @@
 <body>
 
 <div th:insert="../fragments/header.html :: header"/>
-
+<br>
 <div style="width:600px; margin:0 auto;">
     <p style="font-size:24px;" th:text="${poll.getQuestion()}"></p>
     <p>נכתב ע"י:  <span th:text="${poll.getAuthor().getName()}"/></p>
