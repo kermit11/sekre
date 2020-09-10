@@ -85,6 +85,15 @@ public class HomeController {
         return "login";
     }
 
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
+    public String about(Model model)
+    {
+        String userDisplayName = userService.getCurrentUserName();
+        model.addAttribute("curUser", userDisplayName);
+
+        return "about";
+    }
+
     @RequestMapping(value = "/vote", method = RequestMethod.POST, params = "voteType=voteFor")
     public String voteFor(@NonNull @ModelAttribute Poll poll) {
         String user = userService.getCurrentUserEmail();
