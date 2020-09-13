@@ -30,11 +30,6 @@ public class HomeController {
 
     private final UIConfigProps uiConfigProps;
 
-    //TODO: remove, testing
-    @Value( "${mytest:zzz}" )
-    private String mytest;
-
-
     @Autowired
     public HomeController(PollService pollService, AuthorService authorService, UserService userService, VotingService votingService, UIConfigProps uiConfigProps) {
         this.pollService = pollService;
@@ -46,7 +41,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        System.out.println(mytest);
         Poll poll = pollService.getRandomPoll();
         if (poll == null) return "redirect:/new";
 
@@ -146,18 +140,6 @@ public class HomeController {
     public String getMostPopular(@RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
     {
         populatePollList(pageStart, pageSize, pollService::getMostPopularPolls, model);
-
-        //TODO: temp testing code, remove when done
-        @SuppressWarnings("unchecked")
-        List<Poll> topPolls = (List<Poll>) model.getAttribute("polls");
-        if (topPolls != null && topPolls.size() >= 2) {
-            topPolls.get(0).setPublicationDate(new Date());
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            cal.add(Calendar.DATE, 3);
-            topPolls.get(1).setPublicationDate(cal.getTime());
-        }
-
         model.addAttribute("listingTitle", "הכי אהובים");
 
         return "listPolls";

@@ -9,16 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties
 public class YAMLConfig
 {
-    public String getMytest() {
-        return mytest;
-    }
-
-    public void setMytest(String mytest) {
-        this.mytest = mytest;
-    }
-
-    //TODO: get rid of this property
-    private String mytest;
 
 
 }
