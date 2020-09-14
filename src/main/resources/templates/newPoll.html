@@ -21,6 +21,10 @@
                 <td>שמך: </td>
                 <td><input type="text" name="author" th:value="${curUser}"></td>
             </tr>
+            <tr th:if="${isAdmin}">
+                <td>תאריך הוספה: </td>
+                <td><input type="date" name="publicationDate"></td>
+            </tr>
             <tr><td colspan="2" align="center"><br><button type="submit">הוסף</button></td></tr>
         </table>
         <p></p>

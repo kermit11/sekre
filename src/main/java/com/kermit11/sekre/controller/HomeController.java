@@ -9,12 +9,14 @@ import com.kermit11.sekre.service.PollService;
 import com.kermit11.sekre.service.UserService;
 import com.kermit11.sekre.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -120,14 +122,15 @@ public class HomeController {
         model.addAttribute("question", "");
         model.addAttribute("author", "");
         model.addAttribute("curUser", user);
+        model.addAttribute("isAdmin", userService.getCurrent().isAdmin());
 
         return "newPoll";
     }
 
     @RequestMapping(value = "/addPoll", method = RequestMethod.POST)
-    public String addNewPoll(@RequestParam String question, @RequestParam String author) {
+    public String addNewPoll(@RequestParam String question, @RequestParam String author, @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date publicationDate) {
         Author newAuthor = authorService.createAuthor(author);
-        Poll newPoll = new Poll(question, newAuthor, null, null);
+        Poll newPoll = new Poll(question, newAuthor, null, publicationDate);
         pollService.addPoll(newPoll);
 
         return "redirect:/poll/" + newPoll.getId();
