@@ -18,7 +18,7 @@ public class UserService
     public static final User GUEST_USER = new User("guest", "אורח", false);
 
     @Autowired
-    public UserService(@Qualifier("inMemAdminsRepo") AdminUsersDao adminUsersDao)
+    public UserService(@Qualifier("sqlAdminsRepo") AdminUsersDao adminUsersDao)
     {
         this.adminUsersDao = adminUsersDao;
     }
