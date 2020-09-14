@@ -9,15 +9,12 @@ import com.kermit11.sekre.service.PollService;
 import com.kermit11.sekre.service.UserService;
 import com.kermit11.sekre.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,8 +41,8 @@ public class HomeController {
         Poll poll = pollService.getRandomPoll();
         if (poll == null) return "redirect:/new";
 
-        String userDisplayName = userService.getCurrentUserName();
-        String userID = userService.getCurrentUserEmail();
+        String userDisplayName = userService.getCurrent().getUserName();
+        String userID = userService.getCurrent().getUserID();
         UserVotes userVoting = votingService.getVotes(poll.getId(), userID);
 
         model.addAttribute("poll", poll);
@@ -60,8 +57,8 @@ public class HomeController {
         Poll poll = pollService.getPollByID(id);
         if (poll == null) return "redirect:/new";
 
-        String userDisplayName = userService.getCurrentUserName();
-        String userID = userService.getCurrentUserEmail();
+        String userDisplayName = userService.getCurrent().getUserName();
+        String userID = userService.getCurrent().getUserID();
         UserVotes userVoting = votingService.getVotes(poll.getId(), userID);
 
         model.addAttribute("poll", poll);
@@ -82,7 +79,7 @@ public class HomeController {
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about(Model model)
     {
-        String userDisplayName = userService.getCurrentUserName();
+        String userDisplayName = userService.getCurrent().getUserName();
         model.addAttribute("curUser", userDisplayName);
 
         return "about";
@@ -90,7 +87,7 @@ public class HomeController {
 
     @RequestMapping(value = "/vote", method = RequestMethod.POST, params = "voteType=voteFor")
     public String voteFor(@NonNull @ModelAttribute Poll poll) {
-        String user = userService.getCurrentUserEmail();
+        String user = userService.getCurrent().getUserID();
 
         votingService.voteFor(poll.getId(), user);
 
@@ -99,7 +96,7 @@ public class HomeController {
 
     @RequestMapping(value = "/vote", method = RequestMethod.POST, params = "voteType=voteAgainst")
     public String voteAgainst(@NonNull @ModelAttribute Poll poll) {
-        String user = userService.getCurrentUserEmail();
+        String user = userService.getCurrent().getUserID();
 
         votingService.voteAgainst(poll.getId(), user);
 
@@ -108,7 +105,7 @@ public class HomeController {
 
     @RequestMapping(value = "/like", method = RequestMethod.POST)
     public String toggleLike(@NonNull @ModelAttribute Poll poll) {
-        String user = userService.getCurrentUserEmail();
+        String user = userService.getCurrent().getUserID();
 
         votingService.like(poll.getId(), user);
 
@@ -118,7 +115,7 @@ public class HomeController {
 
     @GetMapping("/new")
     public String newPoll(Model model) {
-        String user = userService.getCurrentUserName();
+        String user = userService.getCurrent().getUserName();
 
         model.addAttribute("question", "");
         model.addAttribute("author", "");
@@ -171,7 +168,7 @@ public class HomeController {
         if (pageStart == null) pageStart = 1;
         if (pageSize == null) pageSize = uiConfigProps.getDefaultPageSize();
 
-        String user = userService.getCurrentUserName();
+        String user = userService.getCurrent().getUserName();
 
         PaginationInfo pagInfo = new PaginationInfo(pageStart, pageSize, 0);
 
