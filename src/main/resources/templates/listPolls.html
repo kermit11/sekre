@@ -31,9 +31,11 @@
             <td> <span th:text="${poll.question}"/> </td>
             <td> <a th:href="@{/author/{name}(name=${poll.author.name})}"> <span th:text="${poll.author.name}"/> </a> </td>
             <td>
+                <a th:href="@{/poll/{id}(id=${poll.id})}" style="color: inherit; cursor: pointer; text-decoration: none">
                 <span th:text="${poll.voteTotals.forVotes}"/> &#128077;
                 <span th:text="${poll.voteTotals.againstVotes}"/> &#128078;
                 <span th:text="${poll.voteTotals.likes}"/> &#10084;
+                </a>
             </td>
             <td> <span th:text="${#dates.format(poll.publicationDate, 'dd/MM/yyyy')}"/>  </td>
         </tr>
