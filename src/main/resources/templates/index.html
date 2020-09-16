@@ -42,10 +42,11 @@
 </div>
 <script th:inline="javascript">
     var pollQuestion = [[${poll.getQuestion()}]];
+    var pollURL = window.location.origin + "/poll/" + [[${poll.id}]];
 </script>
 <script type="text/javascript">
-
 	a2a_config = {
+	    linkurl: pollURL,
 		templates: {
 		    twitter: "\""+pollQuestion+"\" - בואו להצביע ולהשפיע באתר סקר'ה! ${link}",
 		    whatsapp: "תראו את הסקר'ה הזה: ${link}",
