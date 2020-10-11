@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -144,6 +146,40 @@ public class HomeController {
     {
         populatePollList(pageStart, pageSize, pollService::getMostPopularPolls, model);
         model.addAttribute("listingTitle", "הכי אהובים");
+
+        return "listPolls";
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String searchPage(Model model)
+    {
+        String userDisplayName = userService.getCurrent().getUserName();
+        model.addAttribute("curUser", userDisplayName);
+
+        return "search";
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public String submitSearch(@RequestParam String searchTerm)
+    {
+        String encodedSearchTerm;
+        try
+        {
+            encodedSearchTerm = URLEncoder.encode(searchTerm, "UTF-8").replace("+", "%20");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            return "/search";
+        }
+
+        return "redirect:/search/" + encodedSearchTerm;
+    }
+
+    @RequestMapping(value = "/search/{searchFor}", method = RequestMethod.GET)
+    public String getSearchResults(@PathVariable String searchFor, @RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
+    {
+        populatePollList(pageStart, pageSize, pag -> pollService.searchPolls(searchFor, pag), model);
+        model.addAttribute("listingTitle", "כל הסקרים שכוללים: '" + searchFor + "'");
 
         return "listPolls";
     }

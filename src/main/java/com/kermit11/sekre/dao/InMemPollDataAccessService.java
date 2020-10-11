@@ -47,7 +47,9 @@ public class InMemPollDataAccessService implements PollDao {
                         POLL_LIST_FILTER.AUTHOR,
                         poll -> poll.getAuthor().getName().equals(((Author) filterValue).getName()),
                         POLL_LIST_FILTER.BROADCAST,
-                        poll -> (poll.getPublicationDate() != null) == (Boolean) filterValue
+                        poll -> (poll.getPublicationDate() != null) == (Boolean) filterValue,
+                        POLL_LIST_FILTER.SEARCH,
+                        poll -> (poll.getQuestion().contains((String)filterValue))
                 );
     }
 

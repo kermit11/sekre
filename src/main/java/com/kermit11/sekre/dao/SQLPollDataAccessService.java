@@ -29,18 +29,35 @@ public class SQLPollDataAccessService implements PollDao
             );
     //The map values are Suppliers of String instead of simply returning String. This is because when
     // dynamically building the filter we are assuming and casting the filterValue input to a different type.
-    private Map<POLL_LIST_FILTER, Supplier<String>> filtersMap(Object filterValue) {
+    private Map<POLL_LIST_FILTER, Supplier<String>> filtersMap(Object filterValue)
+    {
         return Map.of
                 (
                         POLL_LIST_FILTER.NO_FILTER,
                         ()->" WHERE 1=1",
                         POLL_LIST_FILTER.AUTHOR,
-                        ()->" WHERE author = '" + ((Author) filterValue).getIndex().toString() + "'",
+                        ()->" WHERE author = ?",
                         POLL_LIST_FILTER.BROADCAST,
-                        ()->" WHERE publication_date IS" + ((Boolean)filterValue?" NOT":"" ) + " NULL"
+                        ()->" WHERE publication_date IS" + ((Boolean)filterValue?" NOT":"" ) + " NULL",
+                        POLL_LIST_FILTER.SEARCH,
+                        () -> " WHERE question LIKE ?"
                 );
     }
 
+    private Map<POLL_LIST_FILTER, Supplier<Object[]>> filtersParamSuppliers(Object filterValue)
+    {
+        return Map.of
+                (
+                        POLL_LIST_FILTER.NO_FILTER,
+                        ()-> new Object[0],
+                        POLL_LIST_FILTER.AUTHOR,
+                        ()-> new Object[]{((Author) filterValue).getIndex().toString()},
+                        POLL_LIST_FILTER.BROADCAST,
+                        ()-> new Object[0],
+                        POLL_LIST_FILTER.SEARCH,
+                        ()-> new Object[]{"%"+filterValue+"%"}
+                );
+    }
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -90,12 +107,13 @@ public class SQLPollDataAccessService implements PollDao
                 + filtersMap(filterValue).get(filter).get()
                 + sorters.get(sortingType)
                 + " LIMIT " + (paginationInfo.getPageStart() - 1) + ", " + paginationInfo.getPageSize();
-        List<Poll> polls = jdbcTemplate.query(sqlStatement, new PollRowMapper());
+        Object[] parameters = filtersParamSuppliers(filterValue).get(filter).get();
+        List<Poll> polls = jdbcTemplate.query(sqlStatement, new PollRowMapper(), parameters);
 
         String countStatement = "SELECT COUNT(*) "
                 + FROM_POLLS
                 + filtersMap(filterValue).get(filter).get();
-        int filteredCount = jdbcTemplate.queryForObject(countStatement, Integer.TYPE);
+        int filteredCount = jdbcTemplate.queryForObject(countStatement, parameters, Integer.TYPE);
 
         paginationInfo.setTotalSize(filteredCount);
 

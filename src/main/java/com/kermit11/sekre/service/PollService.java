@@ -74,6 +74,14 @@ public class PollService
         return polls;
     }
 
+    public List<Poll> searchPolls(String searchFor, PaginationInfo paginationInfo)
+    {
+        List<Poll> polls = pollDao.getPolls(PollDao.POLL_LIST_SORTING_TYPE.DEFAULT, PollDao.POLL_LIST_FILTER.SEARCH, searchFor, paginationInfo);
+        polls.stream().forEach(this::updateUserVotes);
+
+        return polls;
+    }
+
     public int getPollCount()
     {
         return pollDao.getPollCount();

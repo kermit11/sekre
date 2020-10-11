@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
+<head>
+    <title>סקר'ה</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/style.css}" rel="stylesheet" />
+</head>
+<body>
+
+<div th:insert="../fragments/header.html :: header"/>
+
+<div style="width:90%; margin:0 auto;">
+    <h2>חיפוש</h2>
+        <form action="#" th:action="@{/search}" method="post">
+            <input type="text" name="searchTerm">
+            <button type="submit">חפש</button>
+        </form>
+</div>
+<div th:insert="../fragments/footer.html :: footer"/>
+</body>
+</html>
