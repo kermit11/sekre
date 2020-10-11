@@ -181,7 +181,7 @@ public class HomeController {
         //The invoker tells us which method to use for retrieving the polls using the input functional interface
         List<Poll> pollList = iPollRetriever.retrieve(pagInfo);
 
-        if (pagInfo.getPageStart() > pagInfo.getTotalSize()) {
+        if (pagInfo.getPageStart() > pagInfo.getTotalSize() && pagInfo.getTotalSize() > 0) {
             //TODO: Err properly
             throw new IllegalArgumentException("pageStart value too high!");
         }
