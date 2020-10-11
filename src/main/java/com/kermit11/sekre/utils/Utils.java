@@ -9,6 +9,8 @@ public class Utils
 {
     public static Date dateOnlyStringToUTCDate(String date)
     {
+        if (date == null) return null;
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {

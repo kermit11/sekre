@@ -129,7 +129,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/addPoll", method = RequestMethod.POST)
-    public String addNewPoll(@RequestParam String question, @RequestParam String author, @RequestParam String publicationDate)
+    public String addNewPoll(@RequestParam String question, @RequestParam String author, @RequestParam(required = false) String publicationDate)
     {
         Author newAuthor = authorService.createAuthor(author);
         Date parsedPublicationDate = Utils.dateOnlyStringToUTCDate(publicationDate);
