@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 @Repository("sqlPollRepo")
 public class SQLPollDataAccessService implements PollDao
 {
-    private static final String SELECT_POLLS_COLUMNS = "SELECT polls.id AS poll_id, question, author AS author_id, authors.name AS author_name, publication_date";
+    private static final String SELECT_POLLS_COLUMNS = "SELECT polls.id AS poll_id, question, author AS author_id, authors.name AS author_name, publication_date, origin";
     public static final String FROM_POLLS = " FROM polls LEFT JOIN authors ON polls.author = authors.id";
     private static final Map<POLL_LIST_SORTING_TYPE, String> sorters = Map.of
             (
@@ -147,13 +147,17 @@ public class SQLPollDataAccessService implements PollDao
             Author author = Optional.ofNullable(resultSet.getString("author_id"))
                     .map(aid -> new Author(UUID.fromString(aid), authorName))
                     .orElse(null);
+            UUID origin = Optional.ofNullable(resultSet.getString("origin"))
+                    .map(UUID::fromString)
+                    .orElse(null);
 
             Poll poll = new Poll(
                     resultSet.getString("question"),
                     author,
                     null,
-                    resultSet.getDate("publication_date")
-            );
+                    resultSet.getDate("publication_date"),
+                    origin);
+
             poll.setId(UUID.fromString(resultSet.getString("poll_id")));
 
             return poll;

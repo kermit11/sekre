@@ -1,0 +1,2 @@
+ALTER TABLE polls
+ADD COLUMN origin CHAR(36);

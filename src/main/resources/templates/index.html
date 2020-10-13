@@ -13,6 +13,7 @@
 <div style="width:600px; margin:0 auto;">
     <p style="font-size:24px;" th:text="${poll.getQuestion()}"></p>
     <p>נכתב ע"י:  <span th:text="${poll.getAuthor().getName()}"/></p>
+    <p th:if="${poll.origin}">הערת מערכת: הסקר'ה הזה (או אחד שדומה לו) הופיע כבר <a th:href="@{/poll/{id}(id=${poll.origin})}">כאן</a></p>
     <form action="#" th:action="@{/vote}" th:object="${poll}" method="post" style="display: inline-block">
         <input type="hidden" th:field="*{id}" th:value="${poll.getId()}">
         <input type="radio" class="hiddeninput" id="voteFor" value="voteFor" name="voteType" onchange="this.form.submit()" th:checked="${userVoting.isVotedFor()}">

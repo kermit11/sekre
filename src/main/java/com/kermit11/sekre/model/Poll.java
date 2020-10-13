@@ -14,13 +14,15 @@ public class Poll
     private Author author;
     private VoteTotals voteTotals;
     private Date publicationDate;
+    private UUID origin;
 
-    public Poll(@JsonProperty("question") String question, @JsonProperty("author") Author author, VoteTotals voteTotals, Date publicationDate)
+    public Poll(@JsonProperty("question") String question, @JsonProperty("author") Author author, VoteTotals voteTotals, Date publicationDate, UUID origin)
     {
         this.question = question;
         this.author = author;
         this.voteTotals = (voteTotals !=null)? voteTotals :new VoteTotals();
         this.publicationDate = publicationDate;
+        this.origin = origin;
     }
     public UUID getId() {
         return id;
@@ -29,6 +31,7 @@ public class Poll
     public void setId(UUID id) {
         this.id = id;
     }
+
     public String getQuestion() {
         return question;
     }
@@ -60,4 +63,14 @@ public class Poll
     public void setPublicationDate(Date publicationDate) {
         this.publicationDate = publicationDate;
     }
+
+    public UUID getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(UUID origin) {
+        this.origin = origin;
+    }
+
+
 }

@@ -10,7 +10,6 @@ import com.kermit11.sekre.service.UserService;
 import com.kermit11.sekre.service.VotingService;
 import com.kermit11.sekre.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -135,7 +134,7 @@ public class HomeController {
     {
         Author newAuthor = authorService.createAuthor(author);
         Date parsedPublicationDate = Utils.dateOnlyStringToUTCDate(publicationDate);
-        Poll newPoll = new Poll(question, newAuthor, null, parsedPublicationDate);
+        Poll newPoll = new Poll(question, newAuthor, null, parsedPublicationDate, null);
         pollService.addPoll(newPoll);
 
         return "redirect:/poll/" + newPoll.getId();
