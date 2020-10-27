@@ -13,7 +13,6 @@ node
         {
             def dockerImg = docker.build("kermit11/sekre")
             dockerImg.push()
-
         }
     }
 }
