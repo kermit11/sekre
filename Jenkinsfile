@@ -1,10 +1,9 @@
 node
 {
+    checkout scm
 
     stage('Build')
     {
-        git 'https://github.com/kermit11/sekre.git'
-
         bat "mvn -DskipTests clean package"
     }
 
