@@ -4,7 +4,7 @@ node
 
     stage('Build')
     {
-        bat "mvn -DskipTests clean package"
+        sh "mvn -DskipTests clean package"
     }
 
     stage('Build and push Docker image')
