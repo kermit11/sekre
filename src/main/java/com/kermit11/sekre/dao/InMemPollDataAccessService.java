@@ -78,6 +78,22 @@ public class InMemPollDataAccessService implements PollDao {
     }
 
     @Override
+    public Poll getRandomPollWithLikes() {
+        Collection<Poll> polls = allPolls.values();
+        int totalPolls = (int)polls.stream()
+                .filter(p-> p.getVoteTotals().getLikes() > 0)
+                .count();
+        if (totalPolls == 0) return null;
+        int randIndex = randomGenerator.nextInt(totalPolls);
+
+        return polls.stream()
+                .filter(p-> p.getVoteTotals().getLikes() > 0)
+                .skip(randIndex)
+                .findFirst()
+                .get();
+    }
+
+    @Override
     public int updatePoll(Poll poll) {
         allPolls.put(poll.getId(), poll);
         return 1;

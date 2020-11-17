@@ -1,3 +1,5 @@
 props:
   ui:
     default-page-size: 10
+  logic:
+    probability-for-poll-with-no-likes: 0.2

@@ -21,6 +21,8 @@ public interface PollDao
 
     Poll getRandomPoll();
 
+    Poll getRandomPollWithLikes();
+
     int updatePoll(Poll poll);
 
     List<Poll> getPolls(POLL_LIST_SORTING_TYPE sortingType, POLL_LIST_FILTER filter, Object filterValue, PaginationInfo paginationInfo);

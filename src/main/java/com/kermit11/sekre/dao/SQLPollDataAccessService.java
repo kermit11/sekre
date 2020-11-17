@@ -17,7 +17,10 @@ import java.util.function.Supplier;
 public class SQLPollDataAccessService implements PollDao
 {
     private static final String SELECT_POLLS_COLUMNS = "SELECT polls.id AS poll_id, question, author AS author_id, authors.name AS author_name, publication_date, origin";
-    public static final String FROM_POLLS = " FROM polls LEFT JOIN authors ON polls.author = authors.id";
+    private static final String FROM_POLLS = " FROM polls LEFT JOIN authors ON polls.author = authors.id";
+    private static final String WHERE_HAS_LIKES = " WHERE polls.id IN (SELECT poll_id FROM uservotes WHERE liked = '1')";
+
+
     private static final Map<POLL_LIST_SORTING_TYPE, String> sorters = Map.of
             (
                     POLL_LIST_SORTING_TYPE.DEFAULT,
@@ -92,6 +95,18 @@ public class SQLPollDataAccessService implements PollDao
         return poll;
     }
 
+    @Override
+    public Poll getRandomPollWithLikes() {
+        int totalPolls = getPollWithLikesCount();
+        if (totalPolls == 0) return null;
+        int randIndex = randomGenerator.nextInt(totalPolls);
+
+        String sqlStatement = SELECT_POLLS_COLUMNS + FROM_POLLS + WHERE_HAS_LIKES + " LIMIT " + randIndex + ", 1";
+        Poll poll = jdbcTemplate.queryForObject(sqlStatement, new PollRowMapper());
+
+        return poll;
+    }
+
     //OOS for now
     @Override
     public int updatePoll(Poll poll)
@@ -124,6 +139,13 @@ public class SQLPollDataAccessService implements PollDao
     public int getPollCount()
     {
         String sqlStatement = "SELECT COUNT(*) FROM polls";
+        int rowCount = jdbcTemplate.queryForObject(sqlStatement, Integer.TYPE);
+        return rowCount;
+    }
+
+    private int getPollWithLikesCount()
+    {
+        String sqlStatement = "SELECT COUNT(*) FROM polls" + WHERE_HAS_LIKES;
         int rowCount = jdbcTemplate.queryForObject(sqlStatement, Integer.TYPE);
         return rowCount;
     }
