@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
 
-<head th:insert="../fragments/header.html :: pagehead"/>
+<head th:insert="../fragments/header.html :: pagehead(resizeForMobile=true)"/>
 
 <body>
 
 <div th:insert="../fragments/header.html :: header"/>
 <br>
-<div style="width:600px; margin:0 auto;">
+<div style="max-width:600px; margin:0 auto;">
     <p style="font-size:24px;" th:text="${poll.getQuestion()}"></p>
     <p>נכתב ע"י:  <span th:text="${poll.getAuthor().getName()}"/></p>
     <p th:if="${poll.origin}">הערת מערכת: הסקר'ה הזה (או אחד שדומה לו) הופיע כבר <a th:href="@{/poll/{id}(id=${poll.origin})}">כאן</a></p>
@@ -31,6 +31,7 @@
 <br><br>
 
 <!-- AddToAny BEGIN -->
+<span class="mobile_invisible">
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style" style="display: flex; justify-content: center;">
     שתפו והזמינו חברים להצביע:
     &nbsp;&nbsp;
@@ -40,6 +41,7 @@
     <a class="a2a_button_telegram"></a>
     <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
 </div>
+</span>
 <script th:inline="javascript">
     var pollQuestion = [[${poll.getQuestion()}]];
     var pollURL = window.location.origin + "/poll/" + [[${poll.id}]];

@@ -28,3 +28,45 @@ table {
 .buttonlabel {
   cursor: pointer;
 }
+
+.mobile_only
+{
+    display: none;
+}
+
+.new_poll_textarea
+{
+    width: 400px;
+    height: 80px;
+}
+
+
+/*Mobile definitions*/
+@media screen and (max-width: 481px){
+
+body{
+    background-color: lightblue;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-right: 3%;
+    margin-left: 3%;
+}
+
+.mobile_invisible
+{
+    display: none;
+}
+
+.mobile_only
+{
+    display: inline;
+}
+
+.new_poll_textarea
+{
+    width: 240px;
+    height: 120px;
+}
+
+
+}

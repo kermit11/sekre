@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
 
-<head th:include="../fragments/header.html :: pagehead">
-</head>
+<head th:insert="../fragments/header.html :: pagehead(resizeForMobile=false)"/>
 
 <script type="text/javascript" th:src="@{/js/pagination.js}"> </script>
 

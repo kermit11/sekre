@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
 
-<head th:insert="../fragments/header.html :: pagehead"/>
+<head th:insert="../fragments/header.html :: pagehead(resizeForMobile=true)"/>
 
 <body>
 
 <div th:insert="../fragments/header.html :: header"/>
 
-<div style="width:600px; margin:0 auto;">
+<div style="max-width:600px; margin:0 auto;">
     <form action="#" th:action="@{/addPoll}" method="post">
         <table>
             <tr>
                 <td>השאלה: </td>
-                <td> <textarea name="question" style="width: 400px; height: 80px"></textarea> </td>
+                <td> <textarea name="question" class="new_poll_textarea"></textarea> </td>
             </tr>
             <tr>
                 <td>שמך: </td>

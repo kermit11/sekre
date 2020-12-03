@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
-<head th:fragment="pagehead">
+<head th:fragment="pagehead (resizeForMobile)">
     <title>סקר'ה</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta th:if="${resizeForMobile}" name="viewport" content="width=device-width, initial-scale=1" />
     <link th:href="@{/style.css}" rel="stylesheet" />
     <link rel="icon" href="/images/favicon.png">
 </head>
@@ -16,8 +17,8 @@
             <td align="left">שלום, <span th:text="${curUser}"/> <a href="/login"><span th:text="${curUser}=='אורח'?' [התחבר]':'' " /></a></td>
         </tr>
     </table>
-    <br>
-    <br>
+    <br class="mobile_invisible">
+    <br class="mobile_invisible">
 </div>
 </body>
 
