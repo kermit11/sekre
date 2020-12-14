@@ -4,6 +4,7 @@ import com.kermit11.sekre.controller.PaginationInfo;
 import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -76,11 +77,18 @@ public class SQLPollDataAccessService implements PollDao
     }
 
     @Override
-    public Poll getPollById(UUID id) {
-        String sqlStatement = SELECT_POLLS_COLUMNS + FROM_POLLS + " WHERE polls.id = ?";
-        Poll poll = jdbcTemplate.queryForObject(sqlStatement, new PollRowMapper(), id.toString());
-
-        return poll;
+    public Poll getPollById(UUID id)
+    {
+        try
+        {
+            String sqlStatement = SELECT_POLLS_COLUMNS + FROM_POLLS + " WHERE polls.id = ?";
+            Poll poll = jdbcTemplate.queryForObject(sqlStatement, new PollRowMapper(), id.toString());
+            return poll;
+        }
+        catch (EmptyResultDataAccessException e)
+        {
+            return null;
+        }
     }
 
     @Override

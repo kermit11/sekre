@@ -59,7 +59,7 @@ public class HomeController {
     @RequestMapping(value = "/poll/{id}", method = RequestMethod.GET)
     public String getPollById(@PathVariable UUID id, Model model) {
         Poll poll = pollService.getPollByID(id);
-        if (poll == null) return "redirect:/new";
+        if (poll == null) return "errorPollNotFound";
 
         String userDisplayName = userService.getCurrent().getUserName();
         String userID = userService.getCurrent().getUserID();
