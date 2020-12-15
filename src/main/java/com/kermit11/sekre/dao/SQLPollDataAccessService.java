@@ -71,7 +71,7 @@ public class SQLPollDataAccessService implements PollDao
     @Override
     public int insertPoll(UUID id, Poll poll)
     {
-        String sqlStatement = "INSERT INTO polls (id, question, author, publication_date) values (?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO polls (id, question, author, publication_date, origin) values (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sqlStatement, pollToParams(id, poll));
         return 1;
     }
@@ -115,11 +115,12 @@ public class SQLPollDataAccessService implements PollDao
         return poll;
     }
 
-    //OOS for now
     @Override
     public int updatePoll(Poll poll)
     {
-        return -1;
+        String sqlStatement = "REPLACE INTO polls (id, question, author, publication_date, origin) values (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sqlStatement, pollToParams(poll.getId(), poll));
+        return 1;
     }
 
     @Override
@@ -165,8 +166,9 @@ public class SQLPollDataAccessService implements PollDao
         paramList.add(poll.getQuestion());
         paramList.add(poll.getAuthor().getIndex().toString());
         paramList.add(poll.getPublicationDate());
+        paramList.add(poll.getOrigin()!=null?poll.getOrigin().toString():null);
 
-        return  paramList.toArray();
+        return paramList.toArray();
     }
 
     private static class PollRowMapper implements RowMapper<Poll> {

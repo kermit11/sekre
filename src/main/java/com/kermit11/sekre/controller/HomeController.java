@@ -52,6 +52,7 @@ public class HomeController {
         model.addAttribute("poll", poll);
         model.addAttribute("curUser", userDisplayName);
         model.addAttribute("userVoting", userVoting);
+        model.addAttribute("isAdmin", userService.getCurrent().isAdmin());
 
         return "index";
     }
@@ -68,6 +69,7 @@ public class HomeController {
         model.addAttribute("poll", poll);
         model.addAttribute("curUser", userDisplayName);
         model.addAttribute("userVoting", userVoting);
+        model.addAttribute("isAdmin", userService.getCurrent().isAdmin());
 
         return "index";
     }
@@ -138,6 +140,14 @@ public class HomeController {
         pollService.addPoll(newPoll);
 
         return "redirect:/poll/" + newPoll.getId();
+    }
+
+    @RequestMapping(value = "/markDuplicate", method = RequestMethod.POST)
+    public String markDuplicate(@NonNull @ModelAttribute Poll poll, @RequestParam UUID original)
+    {
+        pollService.markAsDuplicate(poll.getId(), original);
+
+        return "redirect:/poll/" + poll.getId();
     }
 
     @RequestMapping(value = "/popular", method = RequestMethod.GET)

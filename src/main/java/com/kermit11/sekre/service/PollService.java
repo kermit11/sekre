@@ -39,6 +39,15 @@ public class PollService
        return pollDao.updatePoll(poll);
     }
 
+    public int markAsDuplicate(UUID duplicate, UUID original)
+    {
+        Poll dupPoll = getPollByID(duplicate);
+        if (dupPoll == null) return -1;
+
+        dupPoll.setOrigin(original);
+        return updatePoll(dupPoll);
+    }
+
     public Poll getPollByID(UUID id)
     {
         Optional<Poll> pollOpt = Optional.ofNullable(pollDao.getPollById(id));

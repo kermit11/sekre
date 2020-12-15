@@ -26,6 +26,34 @@
         <input type="image" th:src="${userVoting.isLiked()?'/buttons/heart-red-filled.png':'/buttons/heart-red.png'}" width="18" height="18">
         <span th:text="'אהבתי: ' + ${poll.voteTotals.likes}"/>
     </form>
+
+    <span th:if="${isAdmin}">
+    <br><br>
+    <input type="checkbox" id="showDupDiv" onclick="toggleDupDiv()">
+    <label for="showDupDiv">סמן סקר'ה זה כ"היה כבר"</label>
+    <br>
+    <div id="dupDiv" style="display:none">
+        <div style="margin-right: 20px">
+            הכנס כאן את הID של הסקר'ה המקורי (פתח בטאב נפרד, והעתק משורת הכתובת את הID)
+            <form action="#" th:action="@{/markDuplicate}" th:object="${poll}" method="post" >
+                <input type="hidden" th:field="*{id}" th:value="${poll.getId()}">
+                <input type="text" name="original">
+                <button type="submit">סמן</button>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function toggleDupDiv()
+        {
+            var dupDiv = document.getElementById("dupDiv");
+            if (dupDiv.style.display === "none") {
+                dupDiv.style.display = "block";
+            } else {
+                dupDiv.style.display = "none";
+            }
+        }
+    </script>
+    </span>
 </div>
 
 <br><br>
