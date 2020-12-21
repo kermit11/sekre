@@ -8,8 +8,10 @@ import com.kermit11.sekre.service.AuthorService;
 import com.kermit11.sekre.service.PollService;
 import com.kermit11.sekre.service.UserService;
 import com.kermit11.sekre.service.VotingService;
+import com.kermit11.sekre.utils.DataNotFoundException;
 import com.kermit11.sekre.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,7 +62,7 @@ public class HomeController {
     @RequestMapping(value = "/poll/{id}", method = RequestMethod.GET)
     public String getPollById(@PathVariable UUID id, Model model) {
         Poll poll = pollService.getPollByID(id);
-        if (poll == null) return "errorPollNotFound";
+        if (poll == null) throw new DataNotFoundException("הסקר'ה הזה");
 
         String userDisplayName = userService.getCurrent().getUserName();
         String userID = userService.getCurrent().getUserID();
@@ -197,7 +199,7 @@ public class HomeController {
     public String getPollsByAuthor(@PathVariable String name, @RequestParam(required = false) Integer pageStart, @RequestParam(required = false) Integer pageSize, Model model)
     {
         Author author = authorService.getAuthorByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Author " + name + " doesn't exist!"));
+                .orElseThrow(() -> new DataNotFoundException("המחבר " + name));
 
         populatePollList(pageStart, pageSize, pag -> pollService.getPollsByAuthor(author, pag), model);
         model.addAttribute("listingTitle", "הסקרים של: " + name);
@@ -242,6 +244,15 @@ public class HomeController {
     interface PollRetriever
     {
         List<Poll> retrieve(PaginationInfo paginationInfo);
+    }
+
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(DataNotFoundException.class)
+    public String handleDataNotFound(DataNotFoundException exception, Model model)
+    {
+        model.addAttribute("missingData", exception.getMissingData());
+        return "errorDataNotFound";
     }
 
 }
