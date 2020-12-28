@@ -16,7 +16,7 @@
             </tr>
             <tr>
                 <td>שמך: </td>
-                <td><input type="text" name="author" th:value="${curUser}"></td>
+                <td><input type="text" name="author" th:value="${isAdmin}?'':${curUser}"></td>
             </tr>
             <tr th:if="${isAdmin}">
                 <td>תאריך הוספה: </td>
