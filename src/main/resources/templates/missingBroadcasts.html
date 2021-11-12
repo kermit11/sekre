@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" dir="rtl" >
+
+<head th:insert="../fragments/header.html :: pagehead(resizeForMobile=false)"/>
+
+<body>
+
+<div th:insert="../fragments/header.html :: header"/>
+
+<div style="width:90%; margin:0 auto;">
+
+
+    <h2>תאריכים מיותמים</h2>
+    <br>
+<a href="https://www.podchaser.com/podcasts/-9401/episodes/recent">חפש כאן</a>
+    <ul>
+        <li th:each="showDate : ${allShows}" th:text="${showDate}">default</li>
+    </ul>
+    <br>
+    <br>
+    <br>
+
+<div th:insert="../fragments/footer.html :: footer"/>
+
+</body>
+
+</html>

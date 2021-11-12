@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     {
         http.authorizeRequests()
                 .antMatchers("/vote", "/like")
-                .authenticated()
+                    .authenticated()
                 .anyRequest()
                     .permitAll()
                 .and().oauth2Login()
