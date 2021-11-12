@@ -5,6 +5,8 @@ import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -123,5 +125,13 @@ public class InMemPollDataAccessService implements PollDao {
     public int getPollCount()
     {
         return allPolls.size();
+    }
+
+    @Override
+    public List<LocalDate> getAllBroadcastDates()
+    {
+        return allPolls.values().stream()
+                .map(p->p.getPublicationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
+                .collect(Collectors.toList());
     }
 }

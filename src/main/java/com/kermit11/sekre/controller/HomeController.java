@@ -4,10 +4,7 @@ import com.kermit11.sekre.config.UIConfigProps;
 import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 import com.kermit11.sekre.model.UserVotes;
-import com.kermit11.sekre.service.AuthorService;
-import com.kermit11.sekre.service.PollService;
-import com.kermit11.sekre.service.UserService;
-import com.kermit11.sekre.service.VotingService;
+import com.kermit11.sekre.service.*;
 import com.kermit11.sekre.utils.DataNotFoundException;
 import com.kermit11.sekre.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,15 +28,17 @@ public class HomeController {
     private final AuthorService authorService;
     private final UserService userService;
     private final VotingService votingService;
+    private final MissingShowsService missingShowsService;
 
     private final UIConfigProps uiConfigProps;
 
     @Autowired
-    public HomeController(PollService pollService, AuthorService authorService, UserService userService, VotingService votingService, UIConfigProps uiConfigProps) {
+    public HomeController(PollService pollService, AuthorService authorService, UserService userService, VotingService votingService, MissingShowsService missingShowsService, UIConfigProps uiConfigProps) {
         this.pollService = pollService;
         this.authorService = authorService;
         this.userService = userService;
         this.votingService = votingService;
+        this.missingShowsService = missingShowsService;
         this.uiConfigProps = uiConfigProps;
     }
 
@@ -214,6 +214,19 @@ public class HomeController {
         model.addAttribute("listingTitle", "הסקרים שעלו לשידור");
 
         return "listPolls";
+    }
+
+    @RequestMapping(value = "/showMissing", method = RequestMethod.GET)
+    public String showMissingBroadcasts(Model model)
+    {
+        String userDisplayName = userService.getCurrent().getUserName();
+        model.addAttribute("curUser", userDisplayName);
+
+        List<String> allShows = missingShowsService.getMissingShows(LocalDate.of(2018, 2, 7), LocalDate.now());
+        model.addAttribute("allShows", allShows);
+
+
+        return "missingBroadcasts";
     }
 
     private void populatePollList(Integer pageStart, Integer pageSize, PollRetriever iPollRetriever, Model model)

@@ -9,12 +9,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-@Repository("sqlPollRepo")
+ @Repository("sqlPollRepo")
 public class SQLPollDataAccessService implements PollDao
 {
     private static final String SELECT_POLLS_COLUMNS = "SELECT polls.id AS poll_id, question, author AS author_id, authors.name AS author_name, publication_date, origin";
@@ -150,6 +153,20 @@ public class SQLPollDataAccessService implements PollDao
         String sqlStatement = "SELECT COUNT(*) FROM polls";
         int rowCount = jdbcTemplate.queryForObject(sqlStatement, Integer.TYPE);
         return rowCount;
+    }
+
+    @Override
+    public List<LocalDate> getAllBroadcastDates()
+    {
+        String sqlStatement = "SELECT publication_date"
+                + FROM_POLLS
+                + " WHERE publication_date IS NOT NULL"
+                + " ORDER BY publication_date DESC";
+        List<Date> dates = jdbcTemplate.queryForList(sqlStatement, Date.class);
+
+        return dates.stream()
+                .map(Date::toLocalDate)
+                .collect(Collectors.toList());
     }
 
     private int getPollWithLikesCount()

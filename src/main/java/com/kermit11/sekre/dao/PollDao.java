@@ -4,6 +4,7 @@ import com.kermit11.sekre.controller.PaginationInfo;
 import com.kermit11.sekre.model.Author;
 import com.kermit11.sekre.model.Poll;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,8 @@ public interface PollDao
     List<Poll> getPolls(POLL_LIST_SORTING_TYPE sortingType, POLL_LIST_FILTER filter, Object filterValue, PaginationInfo paginationInfo);
 
     int getPollCount();
+
+    List<LocalDate> getAllBroadcastDates();
 
     public enum POLL_LIST_SORTING_TYPE {DEFAULT, MOST_LIKES, PUBLICATION_DATE}
 
