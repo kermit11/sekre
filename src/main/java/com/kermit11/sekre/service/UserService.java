@@ -15,7 +15,7 @@ public class UserService
 {
     private final AdminUsersDao adminUsersDao;
 
-    public static final User GUEST_USER = new User("guest", "אורח", false);
+    public static final User GUEST_USER = new User("guest", "אורח", true);
 
     @Autowired
     public UserService(@Qualifier("sqlAdminsRepo") AdminUsersDao adminUsersDao)
