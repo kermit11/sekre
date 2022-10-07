@@ -43,9 +43,12 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, HttpServletRequest request) {
         Poll poll = pollService.getRandomPoll();
         if (poll == null) return "redirect:/new";
+
+        Boolean closureMessageShown = (Boolean)request.getSession().getAttribute("closureMessageShown");
+        if (closureMessageShown == null || closureMessageShown == false) return "redirect:/closure";
 
         String userDisplayName = userService.getCurrent().getUserName();
         String userID = userService.getCurrent().getUserID();
@@ -57,6 +60,17 @@ public class HomeController {
         model.addAttribute("isAdmin", userService.getCurrent().isAdmin());
 
         return "index";
+    }
+
+    @GetMapping("/closure")
+    public String closure(Model model, HttpServletRequest request)
+    {
+        request.getSession().setAttribute("closureMessageShown", Boolean.TRUE);
+
+        String userDisplayName = userService.getCurrent().getUserName();
+        model.addAttribute("curUser", userDisplayName);
+
+        return "closureMessage";
     }
 
     @RequestMapping(value = "/poll/{id}", method = RequestMethod.GET)
